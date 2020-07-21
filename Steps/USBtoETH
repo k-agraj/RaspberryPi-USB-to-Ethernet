@@ -1,0 +1,2 @@
+## Install dnsmasq
+From the command line, run `sudo apt install dnsmasq` to install dnsmasq. Stop it, for now, with `sudo systemctl stop dnsmasq`
