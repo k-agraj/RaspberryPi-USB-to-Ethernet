@@ -10,7 +10,7 @@ Install dnsmasq
 
 Static IP for eth0
 - Now set a static IP address for the ethernet connection (eth0). 
-- Edit _/etc/dhcpcd.conf_ with `sudo nano /etc/dhcpcd.conf`. 
+- Edit dhcpcd.conf with `sudo nano /etc/dhcpcd.conf`. 
 - Go to the end of the file and edit it so that it looks like the following:
 ***
 interface eth0
@@ -34,13 +34,13 @@ dhcp-range=192.168.10.150,192.168.10.170,255.255.255.0,24h
 
 IP forwarding
 
-- Edit _/etc/sysctl.conf_ with `sudo nano /etc/sysctl.conf` and uncomment this line.
+- Edit sysctl.conf with `sudo nano /etc/sysctl.conf` and uncomment this line.
 ***
 net.ipv4.ip_forward=1
 ***
 Enable traffic forwarding with `sudo sysctl -w net.ipv4.ip_forward=1`
 
-- Add a masquerade for outbound traffic on eth0
+- Add a masquerade for outbound traffic on usb0
 ***
 sudo iptables -t nat -A  POSTROUTING -o usb0 -j MASQUERADE
 ***
@@ -50,7 +50,7 @@ sudo iptables -t nat -A  POSTROUTING -o usb0 -j MASQUERADE
 sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
 ***
 
-- Edit _/etc/rc.local_ with `sudo nano /etc/rc.local`
+- Edit rc.local with `sudo nano /etc/rc.local`
 - Add this just above "exit 0" to install these rules on boot.
 ***
 iptables-restore < /etc/iptables.ipv4.nat
