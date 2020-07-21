@@ -1,2 +1,61 @@
-## Install dnsmasq
-From the command line, run `sudo apt install dnsmasq` to install dnsmasq. Stop it, for now, with `sudo systemctl stop dnsmasq`
+Following steps are to be executed on terminal in Raspberry Pi  or SSH console.
+
+Determinig interface names
+- From the command line, run 'ifconfig'.
+- This will give you the usb interface name 'usb0' or similar and the ethernet interface 'eth0' or similar.
+
+Install dnsmasq
+- From the command line, run `sudo apt install dnsmasq` to install dnsmasq. 
+- Stop it, for now, with `sudo systemctl stop dnsmasq`
+
+Static IP for eth0
+- Now set a static IP address for the ethernet connection (eth0). 
+- Edit _/etc/dhcpcd.conf_ with `sudo nano /etc/dhcpcd.conf`. 
+- Go to the end of the file and edit it so that it looks like the following:
+***
+interface eth0
+    static ip_address=192.168.10.1/24
+***
+
+Configure dnsmasq
+
+- Backup old conf file and create a new conf file:
+***
+sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.org
+sudo nano /etc/dnsmasq.conf
+***
+- Add these lines:
+***
+interface=eth0
+dhcp-range=192.168.10.150,192.168.10.170,255.255.255.0,24h
+***
+- This will define a new DHCP range 192.168.10.x which will be given to any device connected to ethernet port of raspberry pi.
+- Now start dnsmasq with `sudo systemctl start dnsmasq`
+
+IP forwarding
+
+- Edit _/etc/sysctl.conf_ with `sudo nano /etc/sysctl.conf` and uncomment this line.
+***
+net.ipv4.ip_forward=1
+***
+Enable traffic forwarding with `sudo sysctl -w net.ipv4.ip_forward=1`
+
+- Add a masquerade for outbound traffic on eth0
+***
+sudo iptables -t nat -A  POSTROUTING -o usb0 -j MASQUERADE
+***
+
+- Save the iptables.
+***
+sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
+***
+
+- Edit _/etc/rc.local_ with `sudo nano /etc/rc.local`
+- Add this just above "exit 0" to install these rules on boot.
+***
+iptables-restore < /etc/iptables.ipv4.nat
+***
+
+- Restart Raspberry Pi
+Execute command 'sudo init 6'
+
