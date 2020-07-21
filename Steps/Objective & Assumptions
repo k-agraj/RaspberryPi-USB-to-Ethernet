@@ -1,0 +1,17 @@
+## Objectives
+Our main objective here is to get USB Internet Devices(Dongals) like JioFi3 or Airtel MyWifi routed over the thernet network at any home or office premisis. Clarifying my scenario, I have an unstable internet connection in my home and want my JioFi device to be added on ethernet network using load balancing router. 
+
+## Personal Objective
+I have an unstable broadband internet connection in my home and want my JioFi device to be added on ethernet network using load balancing router for failovers. I am using TP-Link TL-R470T+ 5-Port Load Balance Broadband Router which comes with 1 Dedicated WAN, 3 Configurable WAN/LAN & 1 Dedicated Lan Port.
+
+## Required
+- Raspberry Pi : Any model can be used as far as it has one USB and one ethernet port.
+- 8 GB Micro SD Card
+- 5V 2A Power Adapter & Cable
+- Micro USB cables : Compatible with the USB Device we are planning to use.
+- Ethernet Cable
+
+## Assumptions
+- Raspbian is installed on Pi.
+- Raspberry Pi is coneected on the internet and discoverable.
+- You have SSH or VNC access to the pi.
