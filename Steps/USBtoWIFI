@@ -1,0 +1,80 @@
+Following steps are to be executed on terminal in Raspberry Pi  or SSH console.
+
+Determinig interface names
+- From the command line, run 'ifconfig'.
+- This will give you the usb interface name 'usb0' or similar and the ethernet interface 'eth0' or similar.
+
+Install dnsmasq
+- From the command line, run `sudo apt install dnsmasq` to install dnsmasq. 
+- Stop it, for now, with `sudo systemctl stop dnsmasq`
+
+Static IP for wlan0
+- Now set a static IP address for the Wi-Fi (wlan0). 
+- Edit dhcpcd.conf with `sudo nano /etc/dhcpcd.conf`. 
+-  to the end of the file and add these lines:
+***
+interface wlan0
+    static ip_address=192.168.20.1/24
+    nohook wpa_supplicant
+***
+
+This will give it a static address of 192.168.20.1
+
+- Now restart the DHCP server with `sudo service dhcpcd restart`
+
+- Install hostapd
+***
+sudo apt install hostapd
+sudo systemctl stop hostapd
+***
+
+- Edit the dnsmasq.conf file with `sudo nano /etc/dnsmasq.conf` and add
+
+***
+interface=wlan0
+dhcp-range=192.168.20.150,192.168.20.200,255.255.255.0,24h
+***
+
+- Reload the configuration file with `sudo systemctl reload dnsmasq`
+
+- Configure hostapd
+To use the 5 GHz band, you can change the operations mode from hw_mode=g to hw_mode=a. Possible values for hw_mode are:
+
+* a = IEEE 802.11a (5 GHz)
+* b = IEEE 802.11b (2.4 GHz)
+* g = IEEE 802.11g (2.4 GHz)
+
+Edit hostapd.conf `sudo nano /etc/hostapd/hostapd.conf` and add these line:
+***
+interface=wlan0
+driver=nl80211
+ssid=RaspberryPi
+hw_mode=g
+channel=7
+wmm_enabled=0
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=raspberrypi
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+***
+
+- RaspberryPi will be the network SSID and the password will be raspberrypi.
+- We now need to tell the system where to find this configuration file.
+- Edit this file `sudo nano /etc/default/hostapd` and find the line with #DAEMON_CONF, and replace it with this:
+***
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+***
+
+- Now enable and start hostapd:
+***
+sudo systemctl unmask hostapd
+sudo systemctl enable hostapd
+sudo systemctl start hostapd
+***
+
+- Restart Raspberry Pi
+Execute command 'sudo init 6'
