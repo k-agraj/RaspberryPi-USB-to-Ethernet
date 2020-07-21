@@ -4,10 +4,11 @@ Our main objective here is to get USB Internet Devices(Dongals) like JioFi3 or A
 Personal Objective
 I have an unstable broadband internet connection in my home and want my JioFi device to be added on ethernet network using load balancing router for failovers. I am using TP-Link TL-R470T+ 5-Port Load Balance Broadband Router which comes with 1 Dedicated WAN, 3 Configurable WAN/LAN & 1 Dedicated Lan Port.
 
-Required
+Requirements
 - Raspberry Pi : Any model can be used as far as it has one USB and one ethernet port.
 - 8 GB Micro SD Card
 - 5V 2A Power Adapter & Cable
+- Any compatible iternet device. **Disclaimer** This works fine with the new JioFi3 or MyWifi like android based routers and expected to work similarly with older internet devices.
 - Micro USB cables : Compatible with the USB Device we are planning to use.
 - Ethernet Cable
 
