@@ -21,7 +21,7 @@ Configure dnsmasq
 
 - Backup old conf file and create a new conf file:
 ***
-sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.org
+sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.bkp
 sudo nano /etc/dnsmasq.conf
 ***
 - Add these lines:
